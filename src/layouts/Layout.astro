@@ -1,0 +1,172 @@
+---
+import { Font } from "astro:assets";
+import Icon from "../components/Icon.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = "Teaching - Parham Alvani",
+	description = "Open course material and hands-on projects by Parham Alvani: C, Python, Go, Internet Engineering, Information Security, Kubernetes, and LLMs.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const nav = [
+	{ href: "#courses", label: "Courses" },
+	{ href: "#projects", label: "Projects" },
+	{ href: "#workshops", label: "Workshops" },
+	{ href: "#tooling", label: "Tooling" },
+];
+
+const elsewhere = [
+	{ href: "https://1995parham.me", icon: "house", label: "About me" },
+	{
+		href: "https://github.com/1995parham-teaching",
+		icon: "github",
+		label: "1995parham-teaching on GitHub",
+	},
+	{
+		href: "https://www.youtube.com/@parhamalvani",
+		icon: "youtube",
+		label: "YouTube",
+	},
+] as const;
+
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: "Parham Alvani - Teaching",
+	url: "https://teaching.1995parham.me",
+	description,
+	author: {
+		"@type": "Person",
+		name: "Parham Alvani",
+		url: "https://1995parham.me",
+	},
+};
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f7f4" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1114" />
+		<meta name="robots" content="index, follow" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content="Parham Alvani" />
+
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Parham Alvani - Teaching" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+
+		<!-- JSON-LD Structured Data -->
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+		<link
+			rel="icon"
+			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>"
+		/>
+
+		<Font cssVariable="--font-inter" preload />
+
+		<!-- Apply a saved theme before first paint so there is no flash. -->
+		<script is:inline>
+			try {
+				const theme = localStorage.getItem("theme");
+				if (theme === "light" || theme === "dark") {
+					document.documentElement.dataset.theme = theme;
+				}
+			} catch {}
+		</script>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+
+		<header class="site-header">
+			<div class="container">
+				<a class="brand" href="/">
+					<Icon name="graduation-cap" />
+					<span>Parham Alvani · Teaching</span>
+				</a>
+				<nav class="site-nav" aria-label="Main">
+					<ul>
+						{
+							nav.map((item) => (
+								<li>
+									<a href={item.href}>{item.label}</a>
+								</li>
+							))
+						}
+						<li>
+							<a href="https://1995parham.me">About me <Icon name="external" /></a>
+						</li>
+					</ul>
+				</nav>
+				<ThemeToggle />
+			</div>
+		</header>
+
+		<main id="main" class="site-main">
+			<div class="container">
+				<slot />
+			</div>
+		</main>
+
+		<footer class="site-footer">
+			<div class="container">
+				<div class="footer-grid">
+					<div>
+						<p class="footer-tagline">Learn by building</p>
+						<p>
+							Course material, slides, assignments, and the code written in
+							class, all published openly. Issues and pull requests are
+							welcome on every repository.
+						</p>
+					</div>
+					<div>
+						<h2 class="footer-heading">Elsewhere</h2>
+						<ul class="footer-list">
+							{
+								elsewhere.map((s) => (
+									<li>
+										<a href={s.href} target="_blank" rel="me noopener">
+											<Icon name={s.icon} />
+											{s.label}
+										</a>
+									</li>
+								))
+							}
+						</ul>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<span>&copy; {new Date().getFullYear()} Parham Alvani</span>
+					<a href="https://github.com/1995parham-teaching/1995parham-teaching.github.io">
+						<Icon name="github" /> Source of this page
+					</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

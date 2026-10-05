@@ -1,0 +1,88 @@
+---
+import { Image } from "astro:assets";
+import banner from "../assets/banner.jpg";
+import Icon from "../components/Icon.astro";
+import { sections } from "../data/teaching";
+import Layout from "../layouts/Layout.astro";
+
+const isExternal = (href: string) =>
+	!href.includes("github.com/1995parham-teaching");
+---
+<Layout>
+	<header class="page-header">
+		<span class="eyebrow">Parham Alvani</span>
+		<h1>Teaching</h1>
+		<p class="lead">
+			Courses I have taught, with slides, notes, assignments, and the code
+			written in class, published openly under the
+			<a href="https://github.com/1995parham-teaching">1995parham-teaching</a>
+			organization on GitHub.
+		</p>
+	</header>
+
+	<Image
+		class="hero-banner"
+		src={banner}
+		alt=""
+		width={1024}
+		height={1024}
+		widths={[640, 1024]}
+		sizes="(max-width: 62rem) 100vw, 62rem"
+		loading="eager"
+	/>
+
+	{
+		sections.map((section) => (
+			<section class="section" id={section.id} aria-labelledby={`${section.id}-title`}>
+				<h2 id={`${section.id}-title`} class="section-title">
+					<Icon name={section.icon} />
+					{section.title}
+				</h2>
+				<p class="section-lead">{section.lead}</p>
+				<div class="course-grid">
+					{section.entries.map((e) => (
+						<article class="card course">
+							<div class="course-head">
+								<h3>
+									<a href={e.href} target="_blank" rel="noopener">
+										{e.title}
+									</a>
+								</h3>
+								{e.archived && (
+									<span class="badge" title="Finished; the repository is read-only">
+										<Icon name="box-archive" /> Archived
+									</span>
+								)}
+							</div>
+							<p>{e.description}</p>
+							<ul class="course-links">
+								<li>
+									<a href={e.href} target="_blank" rel="noopener">
+										{isExternal(e.href) ? (
+											<>
+												Course homepage <Icon name="external" />
+											</>
+										) : (
+											<>
+												<Icon name="github" /> Repository
+											</>
+										)}
+									</a>
+								</li>
+								{e.links?.map((l) => (
+									<li>
+										<a href={l.href} target="_blank" rel="noopener">
+											{l.icon && l.icon !== "external" && <Icon name={l.icon} />}
+											{l.label}
+											{l.icon === "external" && <Icon name="external" />}
+										</a>
+									</li>
+								))}
+							</ul>
+						</article>
+					))}
+				</div>
+			</section>
+		))
+	}
+</Layout>

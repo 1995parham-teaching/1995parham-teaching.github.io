@@ -1,0 +1,26 @@
+{
+	"name": "1995parham-teaching",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@12.3.4",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"check": "astro check",
+		"lint": "biome check .",
+		"format": "biome check --write ."
+	},
+	"dependencies": {
+		"@astrojs/sitemap": "^3.7.4",
+		"@fortawesome/fontawesome-free": "^7.3.1",
+		"astro": "^7.3.5",
+		"sharp": "^0.35.4"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.10",
+		"@biomejs/biome": "^2.5.14",
+		"typescript": "^6.0.3"
+	}
+}

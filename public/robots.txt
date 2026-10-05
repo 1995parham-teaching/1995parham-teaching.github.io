@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://teaching.1995parham.me/sitemap-index.xml
